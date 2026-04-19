@@ -102,7 +102,8 @@ python3 -m pytest
 
 ## Development Workflow
 
-Project rules are documented in [docs/development-guidelines.md](/home/morgmau/projects/aiveritas/docs/development-guidelines.md).
+Global coding defaults for agents live in [/home/morgmau/.codex/AGENTS.md](/home/morgmau/.codex/AGENTS.md).
+Project-specific rules and workflow live in [docs/AIVERITAS_RULES.md](/home/morgmau/projects/aiveritas/docs/AIVERITAS_RULES.md) and [docs/development-guidelines.md](/home/morgmau/projects/aiveritas/docs/development-guidelines.md).
 
 Recommended commands:
 
@@ -119,11 +120,10 @@ make ci
 
 Workflow expectations:
 
-- After each code writing session, run `make lint` and improve the `pylint` result.
-- After each code review pass, run `make lint` again and reduce warnings unless an exception is justified.
 - Use `make review-check` when you want one command for lint plus test validation.
 - Install the versioned `pre-commit` hook with `make install-hooks` so `make lint` runs automatically before each commit.
 - Use [CONTRIBUTING.md](/home/morgmau/projects/aiveritas/CONTRIBUTING.md) as the default contributor workflow.
+- Treat raw `SESSIONS/` notes as private local workflow rather than public project history.
 
 ## CLI Usage
 
@@ -156,6 +156,8 @@ The generated report includes:
 - `validation`: validation result state and enabled checks.
 - `summary`: counts by severity, category, and issue code.
 - `issues`: a canonical issue list with `scope`, `metrics`, `context`, and `ai_explanation`.
+
+Keep the issue and report schema stable unless a deliberate change is documented.
 
 ## Future Roadmap
 
