@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.vscode/
+.env
+report.json
+*.log
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+reports/
