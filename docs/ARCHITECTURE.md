@@ -5,6 +5,14 @@
 AIVeritas is currently a small local CLI application with a modular validation pipeline.
 The design keeps deterministic validation logic separate from report generation and future AI integration.
 
+Related ADRs:
+
+- `ADR-001` local CLI first
+- `ADR-002` canonical issue schema
+- `ADR-003` AI stub before real integration
+- `ADR-004` pytest and pylint as quality gates
+- `ADR-005` private session logs, public durable artifacts
+
 ## Main Components
 
 ### `src/main.py`
@@ -58,3 +66,8 @@ The design keeps deterministic validation logic separate from report generation 
 - The report schema should remain stable as features are added.
 - AI integration must remain optional and isolated from deterministic validation logic.
 
+## Traceability Notes
+
+- Architecture changes should be reflected in `docs/DECISIONS.md`.
+- Feature-level implementation status belongs in `docs/FEATURES.md`, not here.
+- Test coverage expectations for architectural behavior belong in `docs/TEST_MATRIX.md`.

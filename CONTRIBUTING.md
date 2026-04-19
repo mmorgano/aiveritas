@@ -38,6 +38,8 @@ make check
 make ci
 ```
 
+The optional local session workflow is intentionally private and should not be committed as project history.
+
 ## Coding Rules
 
 - Keep code simple, explicit, and readable.
@@ -55,6 +57,12 @@ Detailed project rules are documented in [docs/development-guidelines.md](/home/
 - After each code writing session, run `make lint`.
 - After each review pass, run `make lint` again and improve the result when possible.
 - New behavior should be covered by tests before the change is considered complete.
+
+## Private Working Notes
+
+- Local session notes under `SESSIONS/` are private workflow aids, not repository artifacts.
+- Do not commit raw session logs.
+- If a session produces a durable outcome, update the changelog, sprint record, backlog, or ADRs instead.
 
 ## Pull Requests
 

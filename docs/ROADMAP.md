@@ -14,9 +14,29 @@ The longer-term goal is a maintainable validation platform with configurable rul
 - Keep report schemas stable before adding integrations.
 - Introduce AI only after the deterministic validation pipeline is dependable.
 
+## Traceability
+
+- Feature-level implementation status is tracked in `docs/FEATURES.md`.
+- Sprint execution is tracked in `docs/SPRINTS.md`.
+- Near-term and future candidate work is tracked in `docs/BACKLOG.md`.
+- Test coverage alignment is tracked in `docs/TEST_MATRIX.md`.
+
 ## Phase 1: MVP Baseline
 
 Status: `Implemented`
+
+Primary feature focus:
+
+- `F-01` CSV loading
+- `F-02` Missing-value validation
+- `F-03` Duplicate-row validation
+- `F-04` Numeric outlier validation
+- `F-05` Time-series gap validation
+- `F-06` Structured issue schema
+- `F-07` JSON report generation
+- `F-08` AI explanation stub
+- `F-09` Sample data generation
+- `F-10` Local engineering workflow
 
 Scope:
 
@@ -41,6 +61,11 @@ Exit criteria:
 
 Status: `Planned`
 
+Primary feature focus:
+
+- `F-11` CLI integration coverage
+- `F-12` Configurable validation thresholds
+
 Scope:
 
 - Expand test coverage for CLI flows and failure cases.
@@ -59,6 +84,11 @@ Exit criteria:
 ## Phase 3: Production-Oriented Core
 
 Status: `Planned`
+
+Primary feature focus:
+
+- `F-13` Real AI explanation integration
+- `F-14` Batch processing
 
 Scope:
 
@@ -88,4 +118,3 @@ Scope:
 Exit criteria:
 
 - The project evolves from a local validation CLI into a reusable validation platform.
-

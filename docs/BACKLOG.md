@@ -9,17 +9,27 @@ It should capture real next work without pretending the project has a large deli
 - `P2`: useful follow-up work
 - `P3`: later or opportunistic work
 
+## Maintenance Rules
+
+- Keep backlog items short and implementation-aware.
+- If an item becomes implemented, move the status to `docs/FEATURES.md` and adjust `docs/SPRINTS.md` or `CHANGELOG.md` as needed.
+- If an item changes architecture or workflow materially, reflect it in `docs/DECISIONS.md`.
+
 ## Features
 
 ### P1
 
 - Add configurable outlier threshold support in the CLI and report output.
+  Related feature: `F-12`
 - Add configurable duplicate-check profiles for multiple key combinations.
+  Related feature: `F-12`
 - Add CLI integration tests covering happy path and failure path execution.
+  Related feature: `F-11`
 
 ### P2
 
 - Add batch processing for validating multiple CSV files in one run.
+  Related feature: `F-14`
 - Add report output options for per-run metadata enrichment.
 - Add optional validation presets for common dataset profiles.
 
@@ -45,8 +55,11 @@ It should capture real next work without pretending the project has a large deli
 ### P1
 
 - Add tests for numeric outlier detection.
+  Related feature: `F-04`
 - Add tests for time-series gap detection.
+  Related feature: `F-05`
 - Add CLI tests for generated failure reports.
+  Related feature: `F-11`
 
 ### P2
 
@@ -64,4 +77,3 @@ It should capture real next work without pretending the project has a large deli
 
 - Add release notes discipline once the first tagged version exists.
 - Add example report snippets to the README after the report schema stabilizes further.
-

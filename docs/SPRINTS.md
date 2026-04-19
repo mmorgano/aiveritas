@@ -12,6 +12,14 @@ This file tracks execution in a lightweight format suitable for an early-stage p
 
 Status: `Completed`
 
+Related roadmap phase:
+
+- Phase 1: MVP Baseline
+
+Feature focus:
+
+- `F-01` through `F-09`
+
 Objective:
 
 - Establish the initial repository structure and working validation flow.
@@ -30,6 +38,16 @@ Notes:
 ## Sprint 1: Engineering Discipline and Documentation
 
 Status: `Completed`
+
+Related roadmap phase:
+
+- Phase 1: MVP Baseline
+
+Feature focus:
+
+- `F-06`
+- `F-07`
+- `F-10`
 
 Objective:
 
@@ -50,6 +68,16 @@ Notes:
 
 Status: `Planned`
 
+Related roadmap phase:
+
+- Phase 2: Near-Term Improvements
+
+Feature focus:
+
+- `F-04`
+- `F-05`
+- `F-11`
+
 Objective:
 
 - Improve correctness confidence and reduce fragile validation behavior.
@@ -69,6 +97,14 @@ Exit criteria:
 
 Status: `Planned`
 
+Related roadmap phase:
+
+- Phase 2: Near-Term Improvements
+
+Feature focus:
+
+- `F-12`
+
 Objective:
 
 - Move key validation parameters from code defaults to user-configurable inputs.
@@ -82,4 +118,3 @@ Planned work:
 Exit criteria:
 
 - Users can tune validation behavior without editing source files.
-

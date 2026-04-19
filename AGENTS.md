@@ -53,4 +53,5 @@ Findings should be concrete and reference affected files or behaviors.
 - Mark planned work clearly as planned.
 - Do not document features as implemented unless they exist in the codebase.
 - Update `docs/DECISIONS.md` when a significant technical choice changes the architecture or workflow.
-
+- Treat raw `SESSIONS/` notes as private local workflow, not as public repository documentation.
+- Promote durable outcomes from private work notes into `CHANGELOG.md`, `docs/SPRINTS.md`, or `docs/DECISIONS.md` when appropriate.

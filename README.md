@@ -15,6 +15,19 @@ It runs rule-based quality checks, builds a structured JSON report, and prepares
 - Generate synthetic sample datasets for local testing.
 - Separate runtime status from validation status in the report output.
 
+## Project Documentation
+
+The repository includes a lightweight but maintainable engineering documentation set:
+
+- [docs/ROADMAP.md](/home/morgmau/projects/aiveritas/docs/ROADMAP.md) for project direction and phased evolution
+- [docs/SPRINTS.md](/home/morgmau/projects/aiveritas/docs/SPRINTS.md) for completed and planned execution slices
+- [docs/BACKLOG.md](/home/morgmau/projects/aiveritas/docs/BACKLOG.md) for prioritized future work
+- [docs/FEATURES.md](/home/morgmau/projects/aiveritas/docs/FEATURES.md) for feature inventory and implementation status
+- [docs/TEST_MATRIX.md](/home/morgmau/projects/aiveritas/docs/TEST_MATRIX.md) for feature-to-test traceability
+- [docs/ARCHITECTURE.md](/home/morgmau/projects/aiveritas/docs/ARCHITECTURE.md) for module responsibilities and data flow
+- [docs/DECISIONS.md](/home/morgmau/projects/aiveritas/docs/DECISIONS.md) for lightweight ADRs
+- [CHANGELOG.md](/home/morgmau/projects/aiveritas/CHANGELOG.md) for meaningful repository changes
+
 ## Folder Structure
 
 ```text
@@ -102,8 +115,6 @@ make test
 make review-check
 make check
 make ci
-make session-start
-make session-save
 ```
 
 Workflow expectations:
@@ -113,17 +124,6 @@ Workflow expectations:
 - Use `make review-check` when you want one command for lint plus test validation.
 - Install the versioned `pre-commit` hook with `make install-hooks` so `make lint` runs automatically before each commit.
 - Use [CONTRIBUTING.md](/home/morgmau/projects/aiveritas/CONTRIBUTING.md) as the default contributor workflow.
-- Use `make session-start` and `make session-save` to keep local, uncommitted working-session notes under `SESSIONS/`.
-
-## Local Session Tracking
-
-Session files are intentionally local and ignored by Git.
-
-- Daily files are created as `SESSIONS/SESSION_yyyy-mm-dd.md`.
-- `SESSIONS/LAST_SESSIONS.md` is always synchronized as the latest working copy.
-- `make session-start` creates today session if missing, shows the last session context, and suggests the first unfinished next step.
-- `make session-save` copies today session into `LAST_SESSIONS.md`.
-- `SESSION_NOTES="done X||next Y" make session-save` also appends a timestamped snapshot before syncing.
 
 ## CLI Usage
 

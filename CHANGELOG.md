@@ -17,9 +17,10 @@ The format is intentionally lightweight and closer to Keep a Changelog than to r
 - Automated tests for loader, validator, and report behavior.
 - Developer workflow support through `Makefile`, `pyproject.toml`, lint/test commands, and Git hooks.
 - Project-management and architecture documentation set under `docs/`.
+- Lightweight traceability between roadmap, sprint planning, feature inventory, test coverage, and ADRs.
 
 ### Changed
 
 - Report output was structured into explicit `run`, `configuration`, `dataset`, `validation`, `summary`, and `issues` sections.
 - Contributor workflow was formalized through repository-level documentation and quality gates.
-
+- Public repository documentation was aligned to keep raw session logs private while preserving durable engineering history.
