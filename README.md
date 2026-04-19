@@ -21,8 +21,23 @@ It runs rule-based quality checks, builds a structured JSON report, and prepares
 aiveritas/
 ├── data/
 │   └── synthetic/
+├── AGENTS.md
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── BACKLOG.md
+│   ├── DECISIONS.md
+│   ├── FEATURES.md
+│   ├── ROADMAP.md
+│   ├── SPRINTS.md
+│   ├── TEST_MATRIX.md
+│   └── development-guidelines.md
+├── .githooks/
+│   └── pre-commit
 ├── scripts/
-│   └── generate_sample_data.py
+│   ├── generate_sample_data.py
+│   └── install_git_hooks.sh
 ├── src/
 │   ├── __init__.py
 │   ├── ai_module.py
@@ -51,20 +66,51 @@ source .venv/bin/activate
 2. Install dependencies.
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt -r requirements-dev.txt
 ```
 
-3. Generate sample datasets.
+3. Install the repository Git hooks.
+
+```bash
+make install-hooks
+```
+
+4. Generate sample datasets.
 
 ```bash
 python3 scripts/generate_sample_data.py
 ```
 
-4. Run tests.
+5. Run tests.
 
 ```bash
 python3 -m pytest
 ```
+
+## Development Workflow
+
+Project rules are documented in [docs/development-guidelines.md](/home/morgmau/projects/aiveritas/docs/development-guidelines.md).
+
+Recommended commands:
+
+```bash
+make help
+make bootstrap
+make generate-samples
+make lint
+make test
+make review-check
+make check
+make ci
+```
+
+Workflow expectations:
+
+- After each code writing session, run `make lint` and improve the `pylint` result.
+- After each code review pass, run `make lint` again and reduce warnings unless an exception is justified.
+- Use `make review-check` when you want one command for lint plus test validation.
+- Install the versioned `pre-commit` hook with `make install-hooks` so `make lint` runs automatically before each commit.
+- Use [CONTRIBUTING.md](/home/morgmau/projects/aiveritas/CONTRIBUTING.md) as the default contributor workflow.
 
 ## CLI Usage
 

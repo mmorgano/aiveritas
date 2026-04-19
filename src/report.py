@@ -73,8 +73,12 @@ def build_validation_report(
         },
         "summary": {
             "total_issues": int(len(normalized_issues)),
-            "issues_by_severity": {severity: int(count) for severity, count in severity_counts.items()},
-            "issues_by_category": {category: int(count) for category, count in category_counts.items()},
+            "issues_by_severity": {
+                severity: int(count) for severity, count in severity_counts.items()
+            },
+            "issues_by_category": {
+                category: int(count) for category, count in category_counts.items()
+            },
             "issues_by_code": {code: int(count) for code, count in code_counts.items()},
         },
         "issues": normalized_issues,

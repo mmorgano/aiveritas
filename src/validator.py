@@ -31,7 +31,10 @@ def check_missing_values(dataframe: pd.DataFrame) -> list[ValidationIssue]:
         if missing_count == 0:
             continue
 
-        affected_rows = [to_serializable_value(index) for index in dataframe.index[missing_mask].tolist()]
+        affected_rows = [
+            to_serializable_value(index)
+            for index in dataframe.index[missing_mask].tolist()
+        ]
         issues.append(
             build_issue(
                 code="missing_values",
@@ -75,7 +78,11 @@ def check_duplicate_rows(
     if not duplicate_mask.any():
         return []
 
-    duplicate_groups = dataframe.loc[duplicate_mask].groupby(resolved_key_columns, dropna=False, sort=False)
+    duplicate_groups = dataframe.loc[duplicate_mask].groupby(
+        resolved_key_columns,
+        dropna=False,
+        sort=False,
+    )
     issues: list[ValidationIssue] = []
 
     for group_key, group_frame in duplicate_groups:
@@ -87,7 +94,10 @@ def check_duplicate_rows(
                 severity="error",
                 message="Duplicate rows detected for the selected key columns.",
                 columns=[str(column) for column in resolved_key_columns],
-                row_indices=[to_serializable_value(index) for index in group_frame.index.tolist()],
+                row_indices=[
+                    to_serializable_value(index)
+                    for index in group_frame.index.tolist()
+                ],
                 entity_keys={
                     str(column_name): _to_python_value(value)
                     for column_name, value in zip(resolved_key_columns, normalized_key)
@@ -131,7 +141,9 @@ def check_numeric_outliers(
 
     series = dataframe[resolved_value_column]
     if not pd.api.types.is_numeric_dtype(series):
-        raise TypeError(f"Column must be numeric for outlier detection: {resolved_value_column}")
+        raise TypeError(
+            f"Column must be numeric for outlier detection: {resolved_value_column}"
+        )
 
     numeric_series = series.dropna()
     if numeric_series.empty or len(numeric_series) < 2:
@@ -157,7 +169,9 @@ def check_numeric_outliers(
                 row_indices=[to_serializable_value(row_index)],
                 metrics={
                     "affected_row_count": 1,
-                    "value": to_serializable_value(dataframe.at[row_index, resolved_value_column]),
+                    "value": to_serializable_value(
+                        dataframe.at[row_index, resolved_value_column]
+                    ),
                     "z_score": round(float(z_score), 4),
                     "threshold": z_score_threshold,
                     "mean": round(mean_value, 4),
@@ -193,9 +207,13 @@ def check_time_series_gaps(
     try:
         timestamp_series = pd.to_datetime(dataframe[resolved_time_column], errors="raise")
     except (TypeError, ValueError) as error:
-        raise ValueError(f"Column must contain parseable date values: {resolved_time_column}") from error
+        raise ValueError(
+            f"Column must contain parseable date values: {resolved_time_column}"
+        ) from error
 
-    unique_timestamps = pd.Series(timestamp_series.dropna().drop_duplicates().sort_values().tolist())
+    unique_timestamps = pd.Series(
+        timestamp_series.dropna().drop_duplicates().sort_values().tolist()
+    )
     if len(unique_timestamps) < 2:
         return []
 
@@ -307,7 +325,10 @@ def _resolve_column_name(dataframe: pd.DataFrame, column_name: str) -> str:
             )
 
     formatted_columns = ", ".join(available_columns)
-    raise ValueError(f"Missing required columns: {column_name}. Available columns: {formatted_columns}")
+    raise ValueError(
+        f"Missing required columns: {column_name}. "
+        f"Available columns: {formatted_columns}"
+    )
 
 
 def _to_python_value(value: Any) -> Any:

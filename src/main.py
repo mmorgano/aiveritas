@@ -10,6 +10,7 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# pylint: disable=wrong-import-position
 from src.ai_module import explain_issue
 from src.loader import load_csv
 from src.report import build_validation_report, save_report
@@ -100,7 +101,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             executed_checks=executed_checks,
         )
         output_path = save_report(report, args.output)
-    except Exception as error:
+    except (FileNotFoundError, OSError, TypeError, ValueError) as error:
         failure_issue = build_processing_issue(
             error,
             input_path=args.input,
