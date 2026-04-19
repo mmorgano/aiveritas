@@ -102,6 +102,8 @@ make test
 make review-check
 make check
 make ci
+make session-start
+make session-save
 ```
 
 Workflow expectations:
@@ -111,6 +113,17 @@ Workflow expectations:
 - Use `make review-check` when you want one command for lint plus test validation.
 - Install the versioned `pre-commit` hook with `make install-hooks` so `make lint` runs automatically before each commit.
 - Use [CONTRIBUTING.md](/home/morgmau/projects/aiveritas/CONTRIBUTING.md) as the default contributor workflow.
+- Use `make session-start` and `make session-save` to keep local, uncommitted working-session notes under `SESSIONS/`.
+
+## Local Session Tracking
+
+Session files are intentionally local and ignored by Git.
+
+- Daily files are created as `SESSIONS/SESSION_yyyy-mm-dd.md`.
+- `SESSIONS/LAST_SESSIONS.md` is always synchronized as the latest working copy.
+- `make session-start` creates today session if missing, shows the last session context, and suggests the first unfinished next step.
+- `make session-save` copies today session into `LAST_SESSIONS.md`.
+- `SESSION_NOTES="done X||next Y" make session-save` also appends a timestamped snapshot before syncing.
 
 ## CLI Usage
 
