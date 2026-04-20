@@ -17,6 +17,7 @@ report.json
 reports/
 SESSIONS/
 .local/
+.codex/
 frontend/node_modules/
 frontend/dist/
 data/app_state/
