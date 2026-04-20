@@ -16,3 +16,6 @@ __pycache__/
 report.json
 reports/
 SESSIONS/
+frontend/node_modules/
+frontend/dist/
+data/app_state/

@@ -25,6 +25,8 @@ It should capture real next work without pretending the project has a large deli
   Related feature: `F-12`
 - Add CLI integration tests covering happy path and failure path execution.
   Related feature: `F-11`
+- Add API integration tests that exercise the shared validation service with persisted reports.
+  Related features: `F-15`, `F-16`
 
 ### P2
 
@@ -32,6 +34,8 @@ It should capture real next work without pretending the project has a large deli
   Related feature: `F-14`
 - Add report output options for per-run metadata enrichment.
 - Add optional validation presets for common dataset profiles.
+- Add a richer report-detail view in the GUI once report sections stabilize.
+  Related feature: `F-17`
 
 ### P3
 
@@ -44,11 +48,14 @@ It should capture real next work without pretending the project has a large deli
 
 - Reduce duplicated report and workflow descriptions across documentation files.
 - Review helper boundaries in schema/report handling to keep responsibilities small.
+- Decide whether local app-state paths should become configurable once the GUI grows beyond a single-machine workflow.
+  Related feature: `F-18`
 
 ### P2
 
 - Revisit how validation configuration is passed across CLI, validator, and report modules.
 - Decide whether issue dictionaries should remain plain dicts or move toward typed models later.
+- Review whether frontend API types should be generated or remain hand-maintained once the API surface grows.
 
 ## Quality Improvements
 
@@ -60,6 +67,8 @@ It should capture real next work without pretending the project has a large deli
   Related feature: `F-05`
 - Add CLI tests for generated failure reports.
   Related feature: `F-11`
+- Add frontend smoke coverage for recent-report loading failures and empty-state behavior.
+  Related feature: `F-17`
 
 ### P2
 

@@ -183,3 +183,37 @@ Implications for development:
 
 - New work should continue using schema helpers consistently.
 - If multiple modules start duplicating schema logic, revisit this ADR.
+
+## ADR-007: Add a local GUI as a secondary interface over the shared validation core
+
+Status: `Accepted`
+
+Date: `2026-04-20`
+
+Context:
+
+- The CLI already supports the deterministic validation workflow, but it is not the most approachable interface for interactive local use.
+- A browser-based GUI was requested, but rewriting validation logic for a second interface would create avoidable drift.
+- The repository now includes a shared orchestration layer in `src/services/validation_service.py`.
+
+Decision:
+
+- Add a local FastAPI backend and React + Vite frontend as a second local interface.
+- Keep the CLI supported and route both interfaces through the same shared validation service.
+
+Why:
+
+- The GUI improves accessibility for local use without changing the core validation problem.
+- A shared service layer keeps validation behavior consistent across interfaces.
+- FastAPI and React are a pragmatic split for a local application that may grow gradually.
+
+Consequences:
+
+- The repository now contains Python backend and frontend application code.
+- Interface-level concerns such as HTTP transport, upload handling, and recent-report history must stay outside deterministic validation modules.
+- Verification now needs both Python and frontend checks.
+
+Implications for development:
+
+- Changes to validation behavior should first land in the shared service or deeper core modules, not directly in CLI or API wrappers.
+- Interface changes should update `docs/ARCHITECTURE.md`, `docs/FEATURES.md`, `docs/TEST_MATRIX.md`, and `README.md` when they change user-visible behavior.

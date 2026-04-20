@@ -57,29 +57,33 @@ Exit criteria:
 - Core validation paths are covered by basic tests.
 - Contributor workflow and engineering rules are documented.
 
-## Phase 2: Near-Term Improvements
+## Phase 2: Local Application Foundations
 
-Status: `Planned`
+Status: `In Progress`
 
 Primary feature focus:
 
 - `F-11` CLI integration coverage
 - `F-12` Configurable validation thresholds
+- `F-15` Shared validation orchestration
+- `F-16` Local FastAPI backend
+- `F-17` React-based local GUI
+- `F-18` Recent report history
 
 Scope:
 
+- Extract a shared validation service used by both CLI and GUI flows.
+- Add a local FastAPI backend without replacing the CLI.
+- Add a minimal React + Vite frontend for single-file validation runs.
+- Add lightweight recent-report history for local reopening.
 - Expand test coverage for CLI flows and failure cases.
 - Add configurable validation thresholds and rule parameters.
-- Add richer dataset metadata to reports.
-- Improve validation summaries and issue grouping.
-- Add logging suitable for local debugging and CI usage.
-- Improve documentation traceability between features, tests, and backlog items.
 
 Exit criteria:
 
-- Validation behavior is configurable without code edits.
-- The report format remains stable and better supports downstream tooling.
-- The project can be maintained confidently through tests and documented decisions.
+- The CLI and GUI both use the same deterministic validation orchestration.
+- A local user can validate one CSV at a time through either interface.
+- Validation behavior remains configurable and documented without breaking the report schema.
 
 ## Phase 3: Production-Oriented Core
 
@@ -95,7 +99,7 @@ Scope:
 - Introduce a real AI explanation integration behind a stable interface.
 - Add support for multiple input profiles or validation presets.
 - Add batch processing for multiple files.
-- Improve CLI ergonomics for operational use.
+- Improve interface ergonomics for operational use.
 - Add release discipline and versioned change management.
 
 Exit criteria:
@@ -113,7 +117,7 @@ Scope:
 - Support additional tabular formats beyond CSV.
 - Add pluggable validation rules.
 - Add stronger observability and auditability for validation runs.
-- Explore service or API-based execution models.
+- Explore multi-user or remote execution models if the local application model becomes limiting.
 
 Exit criteria:
 

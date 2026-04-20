@@ -6,7 +6,8 @@ This file captures rules that are specific to AIVeritas and should not automatic
 
 - Preserve the canonical issue schema used by `src/schemas.py`, `src/validator.py`, `src/report.py`, and `src/ai_module.py`.
 - Keep deterministic validation logic separate from AI explanation logic.
-- Keep the repository CLI-first unless an ADR explicitly expands the interface.
+- Keep the CLI supported as a first-class interface.
+- Route local GUI behavior through shared service layers rather than duplicating validation flow in API handlers.
 - Treat raw `SESSIONS/` files as private local workflow and never as public project history.
 - Use durable documents such as `CHANGELOG.md`, `docs/SPRINTS.md`, and `docs/DECISIONS.md` for public engineering traceability.
 

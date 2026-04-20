@@ -19,3 +19,7 @@ Feature IDs are used lightly across roadmap, sprint, backlog, and test documents
 | `F-12` | Configurable validation thresholds | Planned | Not yet implemented | Missing | Thresholds and rule parameters are still mostly hardcoded. |
 | `F-13` | Real AI explanation integration | Planned | Not yet implemented | Missing | The AI module is currently a stub and not connected to an external model. |
 | `F-14` | Batch processing | Planned | Not yet implemented | Missing | The CLI currently handles one input file per run. |
+| `F-15` | Shared validation orchestration | Implemented | `src/services/validation_service.py`, `src/main.py` | Covered | Reuses one validation pipeline across CLI and GUI-oriented entry points. |
+| `F-16` | Local FastAPI backend | Implemented | `src/api/app.py`, `src/api/routes.py`, `src/api/schemas.py` | Covered | Exposes local API endpoints for validation, recent reports, and report reopening. |
+| `F-17` | Local React GUI | Implemented | `frontend/src/` | Covered | Provides a minimal browser-based interface for upload, validation, summary, and reopening recent reports. |
+| `F-18` | Recent report history | Implemented | `src/services/history_service.py`, `src/api/app.py` | Covered | Persists a lightweight local index of recent reports for reopening in the GUI. |

@@ -35,7 +35,8 @@ Findings should be concrete and reference affected files or behaviors.
 - Keep deterministic validation logic separate from AI explanation logic.
 - Keep report-building responsibilities out of validation modules.
 - Use shared schema helpers rather than ad hoc issue dictionaries.
-- Keep the repository CLI-first unless a broader interface change is explicitly required.
+- Keep the CLI supported as a first-class interface even when local GUI features are added.
+- Route new interface behavior through shared service layers rather than reimplementing validation flow.
 
 ## Documentation Guidance
 

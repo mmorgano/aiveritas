@@ -2,18 +2,30 @@ PYTHON ?= $(shell if [ -x .venv/bin/python ]; then echo .venv/bin/python; else e
 PIP ?= $(PYTHON) -m pip
 PYLINTHOME ?= .pylint.d
 
-.PHONY: help bootstrap generate-samples install-dev install-hooks ensure-pylint lint test review-check check ci session-start session-save
+.PHONY: help bootstrap generate-samples install-dev install-hooks ensure-pylint lint test review-check check ci session-start session-save frontend-install frontend-test api-dev gui-dev
 
 install-dev:
 	$(PIP) install -r requirements.txt -r requirements-dev.txt
 
-bootstrap: install-dev install-hooks
+bootstrap: install-dev install-hooks frontend-install
 
 generate-samples:
 	$(PYTHON) scripts/generate_sample_data.py
 
 install-hooks:
 	bash scripts/install_git_hooks.sh
+
+frontend-install:
+	cd frontend && npm install
+
+frontend-test:
+	cd frontend && npm test
+
+api-dev:
+	$(PYTHON) -m uvicorn src.api.app:create_app --factory --reload
+
+gui-dev:
+	cd frontend && npm run dev
 
 ensure-pylint:
 	@$(PYTHON) -c "import importlib.util, sys; sys.exit(0 if importlib.util.find_spec('pylint') else 1)" || \
@@ -40,10 +52,14 @@ session-save:
 help:
 	@printf '%s\n' \
 	'Available targets:' \
-	'  make bootstrap         Install dev dependencies and Git hooks' \
+	'  make bootstrap         Install Python/frontend dependencies and Git hooks' \
 	'  make generate-samples  Generate synthetic CSV datasets' \
 	'  make install-dev       Install runtime and development dependencies' \
 	'  make install-hooks     Install the versioned pre-commit hook' \
+	'  make frontend-install  Install frontend dependencies' \
+	'  make frontend-test     Run frontend tests' \
+	'  make api-dev           Run the API with auto-reload' \
+	'  make gui-dev           Run the frontend dev server' \
 	'  make lint              Run pylint on src and tests' \
 	'  make test              Run pytest' \
 	'  make review-check      Run lint and tests after writing or reviewing code' \

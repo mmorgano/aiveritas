@@ -17,7 +17,8 @@ Project-specific constraints are summarized in [docs/AIVERITAS_RULES.md](/home/m
 - Keep validation logic modular and easy to extend.
 - Preserve the AIVeritas issue/report schema unless a change is intentional and documented.
 - Keep deterministic validation responsibilities separate from AI explanation responsibilities.
-- Keep the repository CLI-first unless an ADR explicitly expands the interface.
+- Keep the CLI supported as a first-class interface.
+- Route local GUI behavior through shared service layers rather than duplicating validation flow in interface code.
 
 ## Repository Workflow
 
