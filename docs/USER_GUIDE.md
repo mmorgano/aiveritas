@@ -2,7 +2,7 @@
 
 ## Overview
 
-AIVeritas validates CSV datasets through:
+AIVeritas validates structured tabular datasets through:
 
 - a local CLI for scriptable runs
 - a local browser-based GUI for interactive runs
