@@ -29,6 +29,7 @@ The repository includes a lightweight but maintainable engineering documentation
 - [docs/TEST_MATRIX.md](/home/morgmau/projects/aiveritas/docs/TEST_MATRIX.md) for feature-to-test traceability
 - [docs/ARCHITECTURE.md](/home/morgmau/projects/aiveritas/docs/ARCHITECTURE.md) for module responsibilities and data flow
 - [docs/DECISIONS.md](/home/morgmau/projects/aiveritas/docs/DECISIONS.md) for lightweight ADRs
+- [docs/USER_GUIDE.md](/home/morgmau/projects/aiveritas/docs/USER_GUIDE.md) for practical CLI and GUI usage
 - [CHANGELOG.md](/home/morgmau/projects/aiveritas/CHANGELOG.md) for meaningful repository changes
 
 ## Folder Structure
