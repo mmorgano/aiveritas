@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 import type { ValidationSubmission } from "../api";
 
@@ -7,23 +7,27 @@ interface ValidationFormProps {
   onSubmit: (submission: ValidationSubmission) => Promise<void>;
 }
 
-const SAMPLE_CSV = "email,name\nada@example.com,Ada Lovelace";
-
 export default function ValidationForm({
   isSubmitting,
   onSubmit,
 }: ValidationFormProps) {
-  const [filename, setFilename] = useState("input.csv");
-  const [csvText, setCsvText] = useState(SAMPLE_CSV);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [keyColumns, setKeyColumns] = useState("");
   const [valueColumn, setValueColumn] = useState("");
   const [timeColumn, setTimeColumn] = useState("");
 
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+    setSelectedFile(event.target.files?.[0] ?? null);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!selectedFile) {
+      return;
+    }
+
     await onSubmit({
-      csvText,
-      filename,
+      file: selectedFile,
       keyColumns,
       timeColumn,
       valueColumn,
@@ -34,18 +38,22 @@ export default function ValidationForm({
     <section className="panel">
       <div className="section-heading">
         <h2>Validate CSV</h2>
-        <p>Submit CSV content to the local FastAPI backend.</p>
+        <p>Choose a CSV file and submit it to the local FastAPI backend.</p>
       </div>
       <form className="stack" onSubmit={handleSubmit}>
-        <label className="stack" htmlFor="filename-input">
-          <span className="field-label">Filename</span>
+        <label className="stack" htmlFor="csv-file-input">
+          <span className="field-label">CSV file</span>
           <input
-            id="filename-input"
-            name="filename"
-            onChange={(event) => setFilename(event.target.value)}
-            type="text"
-            value={filename}
+            accept=".csv,text/csv"
+            aria-label="CSV file"
+            id="csv-file-input"
+            name="csv-file"
+            onChange={handleFileChange}
+            type="file"
           />
+          <span className="field-hint">
+            {selectedFile ? `Selected: ${selectedFile.name}` : "Choose one CSV file to validate."}
+          </span>
         </label>
         <label className="stack" htmlFor="key-columns-input">
           <span className="field-label">Key columns</span>
@@ -77,17 +85,11 @@ export default function ValidationForm({
             value={timeColumn}
           />
         </label>
-        <label className="stack" htmlFor="csv-input">
-          <span className="field-label">CSV content</span>
-          <textarea
-            id="csv-input"
-            name="csv-input"
-            onChange={(event) => setCsvText(event.target.value)}
-            rows={8}
-            value={csvText}
-          />
-        </label>
-        <button className="primary-action" disabled={isSubmitting} type="submit">
+        <button
+          className="primary-action"
+          disabled={isSubmitting || !selectedFile}
+          type="submit"
+        >
           {isSubmitting ? "Validating..." : "Run validation"}
         </button>
       </form>

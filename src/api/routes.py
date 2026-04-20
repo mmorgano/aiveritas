@@ -8,6 +8,7 @@ from typing import Any, Protocol
 from uuid import uuid4
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
+from fastapi.responses import Response
 
 from src.api.schemas import (
     HealthResponse,
@@ -88,6 +89,7 @@ def create_router(
 
         return ValidationResponse(
             report_id=report_id,
+            report_location=str(report_path),
             report=result.report,
         )
 
@@ -115,7 +117,29 @@ def create_router(
                 detail="Report not found.",
             )
 
-        return ReopenReportResponse(report_id=report_id, report=report)
+        return ReopenReportResponse(
+            report_id=report_id,
+            report_location=str(repository.build_report_path(report_id)),
+            report=report,
+        )
+
+    @router.get("/reports/{report_id}/download")
+    async def download_report(report_id: str) -> Response:
+        """Download a saved report JSON by identifier."""
+        report_path = repository.build_report_path(report_id)
+        if not report_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Report not found.",
+            )
+
+        return Response(
+            content=report_path.read_bytes(),
+            media_type="application/json",
+            headers={
+                "Content-Disposition": f'attachment; filename="{report_path.name}"',
+            },
+        )
 
     return router
 

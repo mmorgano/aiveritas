@@ -6,6 +6,7 @@ interface BackendRecentReport {
 }
 
 interface BackendValidationReport {
+  issues?: BackendIssue[];
   dataset?: {
     loaded?: boolean;
     row_count?: number | null;
@@ -18,9 +19,24 @@ interface BackendValidationReport {
     total_issues?: number;
   };
   validation?: {
+    executed_checks?: string[];
     issue_count?: number;
     status?: string;
   };
+}
+
+interface BackendIssueScope {
+  columns?: string[];
+  entity_keys?: Record<string, unknown>;
+  row_indices?: Array<number | string>;
+}
+
+interface BackendIssue {
+  code?: string;
+  issue_id?: string;
+  message?: string;
+  scope?: BackendIssueScope;
+  severity?: string;
 }
 
 interface BackendRecentReportsResponse {
@@ -30,6 +46,7 @@ interface BackendRecentReportsResponse {
 interface BackendValidationResponse {
   report?: BackendValidationReport;
   report_id?: string;
+  report_location?: string;
 }
 
 interface BackendErrorResponse {
@@ -37,8 +54,7 @@ interface BackendErrorResponse {
 }
 
 export interface ValidationSubmission {
-  csvText: string;
-  filename: string;
+  file: File;
   keyColumns: string;
   timeColumn: string;
   valueColumn: string;
@@ -53,11 +69,25 @@ export interface RecentReportItem {
 
 export interface ValidationSummary {
   createdAt: string;
+  executedChecks: string[];
   issueCount: number;
+  issues: ValidationIssue[];
+  inputName: string;
   reportId: string;
+  reportDownloadUrl: string;
+  reportLocation: string;
   rowCount: number | null;
   runStatus: string;
   validationStatus: string;
+}
+
+export interface ValidationIssue {
+  code: string;
+  columns: string[];
+  id: string;
+  message: string;
+  rowIndices: Array<number | string>;
+  severity: string;
 }
 
 const DEFAULT_API_BASE = "http://localhost:8000/api";
@@ -69,6 +99,10 @@ function normalizeApiBase(apiBase: string): string {
 const API_BASE = normalizeApiBase(
   import.meta.env.VITE_API_BASE_URL?.trim() || DEFAULT_API_BASE,
 );
+
+export function buildReportDownloadUrl(reportId: string): string {
+  return `${API_BASE}/reports/${reportId}/download`;
+}
 
 function parseResponseBody(bodyText: string): unknown {
   if (!bodyText) {
@@ -99,7 +133,17 @@ function toErrorDetail(response: Response, data: unknown): string {
 }
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, init);
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, init);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error("Unable to reach the local API. Check that make api-dev is running.");
+    }
+
+    throw error;
+  }
+
   const bodyText = await response.text();
   const data = parseResponseBody(bodyText);
 
@@ -128,8 +172,20 @@ function mapValidationSummary(
 
   return {
     createdAt: report.run?.generated_at ?? "",
+    executedChecks: report.validation?.executed_checks ?? [],
+    inputName: report.run?.input_path?.split("/").pop() ?? "",
     issueCount,
+    issues: (report.issues ?? []).map((issue) => ({
+      code: issue.code ?? "unknown_issue",
+      columns: issue.scope?.columns ?? [],
+      id: issue.issue_id ?? "",
+      message: issue.message ?? "",
+      rowIndices: issue.scope?.row_indices ?? [],
+      severity: issue.severity ?? "unknown",
+    })),
     reportId: response.report_id ?? "",
+    reportDownloadUrl: buildReportDownloadUrl(response.report_id ?? ""),
+    reportLocation: response.report_location ?? "",
     rowCount:
       typeof report.dataset?.row_count === "number" ? report.dataset.row_count : null,
     runStatus: report.run?.status ?? "unknown",
@@ -155,12 +211,7 @@ export async function submitValidation(
   submission: ValidationSubmission,
 ): Promise<ValidationSummary> {
   const formData = new FormData();
-  formData.append(
-    "file",
-    new File([submission.csvText], submission.filename || "input.csv", {
-      type: "text/csv",
-    }),
-  );
+  formData.append("file", submission.file);
   formData.append("key_columns", submission.keyColumns);
   formData.append("value_column", submission.valueColumn);
   formData.append("time_column", submission.timeColumn);

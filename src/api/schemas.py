@@ -32,6 +32,7 @@ class ValidationResponse(BaseModel):
     """Validation response using the shared report payload."""
 
     report_id: str
+    report_location: str
     report: Report
 
 
@@ -39,4 +40,5 @@ class ReopenReportResponse(BaseModel):
     """Reopened report response using the shared report payload."""
 
     report_id: str
+    report_location: str
     report: Report

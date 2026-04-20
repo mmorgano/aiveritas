@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.routes import create_router
 from src.services.history_service import RecentReportStore
@@ -15,6 +16,10 @@ from src.services.validation_service import ValidationRunResult
 
 DEFAULT_HISTORY_PATH = Path("data/app_state/recent_reports.json")
 DEFAULT_REPORTS_DIR = Path("reports")
+LOCAL_FRONTEND_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 
 class LocalReportRepository:
@@ -88,6 +93,13 @@ def create_app(
 ) -> FastAPI:
     """Create the FastAPI application."""
     app = FastAPI(title="AIVeritas API")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=LOCAL_FRONTEND_ORIGINS,
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     repository = LocalReportRepository(
         history_store=history_store or RecentReportStore(DEFAULT_HISTORY_PATH),
         reports_dir=reports_dir or DEFAULT_REPORTS_DIR,

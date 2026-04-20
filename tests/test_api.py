@@ -38,6 +38,19 @@ async def test_health_endpoint_returns_ok(tmp_path: Path) -> None:
 
 
 @pytest.mark.anyio
+async def test_health_endpoint_allows_local_frontend_origin(tmp_path: Path) -> None:
+    """The API should allow the local Vite frontend origin in development."""
+    async with await _build_client(tmp_path=tmp_path) as client:
+        response = await client.get(
+            "/api/health",
+            headers={"Origin": "http://localhost:5173"},
+        )
+
+        assert response.status_code == 200
+        assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
+
+
+@pytest.mark.anyio
 async def test_validate_endpoint_returns_report_and_tracks_history(tmp_path: Path) -> None:
     """Validation should return the shared report payload and persist history."""
     csv_path = tmp_path / "input.csv"
@@ -63,6 +76,7 @@ async def test_validate_endpoint_returns_report_and_tracks_history(tmp_path: Pat
         body = response.json()
 
         assert response.status_code == 200
+        assert body["report_location"].endswith(".json")
         assert body["report"]["run"]["status"] == "succeeded"
         assert body["report"]["validation"]["status"] == "passed"
 
@@ -113,6 +127,7 @@ async def test_validate_endpoint_skips_history_when_report_was_not_persisted(
 
         assert response.status_code == 200
         assert response.json()["report"]["run"]["status"] == "failed"
+        assert response.json()["report_location"].endswith(".json")
 
     assert not history_store.list_entries()
 
@@ -168,7 +183,42 @@ async def test_reopen_report_endpoint_returns_report_payload(tmp_path: Path) -> 
 
         assert response.status_code == 200
         assert response.json()["report_id"] == "r1"
+        assert response.json()["report_location"].endswith("r1.json")
         assert response.json()["report"]["run"]["status"] == "succeeded"
+
+
+@pytest.mark.anyio
+async def test_download_report_endpoint_returns_saved_json(tmp_path: Path) -> None:
+    """Saved reports should be downloadable as JSON from the API."""
+    reports_dir = tmp_path / "reports"
+    reports_dir.mkdir()
+    report_path = reports_dir / "r1.json"
+    report_path.write_text(
+        (
+            '{"report_type": "validation_report", "run": {"status": "succeeded"}, '
+            '"validation": {"status": "passed"}}'
+        ),
+        encoding="utf-8",
+    )
+    history_store = RecentReportStore(tmp_path / "recent_reports.json")
+    history_store.add_entry(
+        report_id="r1",
+        report_path=report_path,
+        input_name="input.csv",
+        run_status="succeeded",
+    )
+
+    async with await _build_client(
+        tmp_path=tmp_path,
+        history_store=history_store,
+        reports_dir=reports_dir,
+    ) as client:
+        response = await client.get("/api/reports/r1/download")
+
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith("application/json")
+        assert "filename=\"r1.json\"" in response.headers["content-disposition"]
+        assert response.json()["run"]["status"] == "succeeded"
 
 
 @pytest.mark.anyio
