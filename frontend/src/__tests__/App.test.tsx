@@ -204,6 +204,23 @@ test("keeps validation disabled until a CSV file is selected", async () => {
   expect(screen.getByRole("button", { name: "Run validation" })).toBeDisabled();
 });
 
+test("shows an error when loading recent reports fails", async () => {
+  fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"));
+
+  render(<App />);
+
+  expect(
+    await screen.findByText(
+      "Unable to reach the local API. Check that make api-dev is running.",
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      "No validation run yet. Submit a CSV file to populate this summary.",
+    ),
+  ).toBeInTheDocument();
+});
+
 test("shows an error when validation submission fails", async () => {
   fetchMock
     .mockResolvedValueOnce(createJsonResponse({ entries: [] }))

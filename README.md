@@ -3,6 +3,9 @@
 AIVeritas is a lightweight validation and reporting engine for structured tabular datasets.
 It is designed for local data-quality checks in operational reporting, statistical preparation, and repeatable validation workflows where a machine-readable report matters more than ad hoc spreadsheet inspection.
 
+Example scenario:
+before publishing a monthly reporting table, use AIVeritas to check for missing required values, duplicate entity rows, numeric anomalies, and broken date continuity, then keep the JSON report as a reviewable validation record.
+
 The project currently supports:
 
 - a Python CLI for scripted validation runs
@@ -43,6 +46,16 @@ This repository is intended to show practical engineering skills rather than mod
 - FastAPI backend and React frontend integration
 - automated tests, linting, and maintainable project documentation
 - portfolio-relevant thinking around data quality, reporting workflows, and validation traceability
+
+## Quality Signals
+
+The current repository includes:
+
+- direct validator tests for missing values, duplicates, numeric outliers, and time-series gaps
+- CLI integration coverage for successful runs and generated failure reports
+- shared-service and API tests for success, validation failure, load failure, and write failure flows
+- frontend tests for validation submission, reopen flows, and recent-report failure handling
+- `pylint`-based linting kept at `10.00/10`
 
 ## Architecture At A Glance
 
@@ -183,13 +196,12 @@ The full schema is documented through the codebase and user guide:
 
 Near-term improvements:
 
-- stronger CLI integration coverage
-- broader outlier and time-series validation coverage
 - configurable validation thresholds
+- richer API integration coverage across persisted-report flows
+- direct tests for AI explanation stub output shape
 
 Longer-term direction:
 
 - real AI explanation integration behind the existing interface
 - richer report exploration
 - batch processing for multiple datasets
-

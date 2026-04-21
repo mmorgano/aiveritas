@@ -23,6 +23,9 @@ The format is intentionally lightweight and closer to Keep a Changelog than to r
 - React + Vite frontend for local CSV validation and minimal report review.
 - Lightweight recent-report history persisted under local application state.
 - Automated tests for validation service, history persistence, local API routes, and frontend behavior.
+- Automated CLI integration tests covering successful runs and missing-input failure reports.
+- Automated direct coverage for numeric outlier issue generation.
+- Automated frontend smoke coverage for initial recent-report loading failures.
 
 ### Changed
 
@@ -30,3 +33,4 @@ The format is intentionally lightweight and closer to Keep a Changelog than to r
 - Contributor workflow was formalized through repository-level documentation and quality gates.
 - Public repository documentation was aligned to keep raw session logs private while preserving durable engineering history.
 - The architecture evolved from CLI-only delivery to a dual local-interface model while keeping the CLI supported.
+- Public README positioning was tightened to present the repository as a compact portfolio project with explicit quality signals.

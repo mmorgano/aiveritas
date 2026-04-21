@@ -67,8 +67,6 @@ It should capture real next work without pretending the project has a large deli
   Related feature: `F-05`
 - Add CLI tests for generated failure reports.
   Related feature: `F-11`
-- Add frontend smoke coverage for recent-report loading failures and empty-state behavior.
-  Related feature: `F-17`
 
 ### P2
 
