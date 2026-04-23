@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0.0",
+  "report_type": "validation_report",
+  "project": {
+    "name": "aiveritas"
+  },
+  "run": {
+    "generated_at": "2026-04-19T08:31:28.289673+00:00",
+    "status": "succeeded",
+    "stage": "completed",
+    "input_path": "data/synthetic/sample_missing.csv"
+  },
+  "configuration": {
+    "key_columns": [
+      "ID"
+    ],
+    "value_column": "VALUE",
+    "time_column": "DATE"
+  },
+  "dataset": {
+    "loaded": true,
+    "row_count": 10,
+    "column_count": 4,
+    "columns": [
+      "ID",
+      "DATE",
+      "VALUE",
+      "CATEGORY"
+    ]
+  },
+  "validation": {
+    "status": "failed",
+    "executed_checks": [
+      "missing_values",
+      "duplicate_rows",
+      "numeric_outlier",
+      "time_series_gap"
+    ],
+    "issue_count": 2
+  },
+  "summary": {
+    "total_issues": 2,
+    "issues_by_severity": {
+      "warning": 2
+    },
+    "issues_by_category": {
+      "completeness": 2
+    },
+    "issues_by_code": {
+      "missing_values": 2
+    }
+  },
+  "issues": [
+    {
+      "issue_id": "ISSUE-0001",
+      "stage": "validation",
+      "code": "missing_values",
+      "category": "completeness",
+      "severity": "warning",
+      "message": "Column 'VALUE' contains missing values.",
+      "scope": {
+        "columns": [
+          "VALUE"
+        ],
+        "row_indices": [
+          1
+        ],
+        "entity_keys": {}
+      },
+      "metrics": {
+        "affected_row_count": 1,
+        "missing_ratio": 0.1
+      },
+      "context": {},
+      "ai_explanation": {
+        "status": "placeholder",
+        "provider": {
+          "name": "stub",
+          "model": null
+        },
+        "summary": "Mock explanation generated for 'missing_values' on VALUE.",
+        "confidence": "low",
+        "possible_causes": [
+          "Source data may be incomplete or inconsistent.",
+          "Upstream extraction or transformation logic may need review."
+        ],
+        "recommended_actions": [
+          "Inspect the affected rows and related upstream systems.",
+          "Treat this explanation block as placeholder metadata, not as a validation feature."
+        ],
+        "metadata": {
+          "issue_code": "missing_values",
+          "issue_stage": "validation",
+          "llm_integration_ready": false,
+          "note": "This response is placeholder scaffolding and not part of the primary v0.1 workflow."
+        }
+      }
+    },
+    {
+      "issue_id": "ISSUE-0002",
+      "stage": "validation",
+      "code": "missing_values",
+      "category": "completeness",
+      "severity": "warning",
+      "message": "Column 'CATEGORY' contains missing values.",
+      "scope": {
+        "columns": [
+          "CATEGORY"
+        ],
+        "row_indices": [
+          3
+        ],
+        "entity_keys": {}
+      },
+      "metrics": {
+        "affected_row_count": 1,
+        "missing_ratio": 0.1
+      },
+      "context": {},
+      "ai_explanation": {
+        "status": "placeholder",
+        "provider": {
+          "name": "stub",
+          "model": null
+        },
+        "summary": "Mock explanation generated for 'missing_values' on CATEGORY.",
+        "confidence": "low",
+        "possible_causes": [
+          "Source data may be incomplete or inconsistent.",
+          "Upstream extraction or transformation logic may need review."
+        ],
+        "recommended_actions": [
+          "Inspect the affected rows and related upstream systems.",
+          "Treat this explanation block as placeholder metadata, not as a validation feature."
+        ],
+        "metadata": {
+          "issue_code": "missing_values",
+          "issue_stage": "validation",
+          "llm_integration_ready": false,
+          "note": "This response is placeholder scaffolding and not part of the primary v0.1 workflow."
+        }
+      }
+    }
+  ]
+}

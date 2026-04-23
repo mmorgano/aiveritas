@@ -22,7 +22,8 @@ This file defines the default development workflow for code changes, reviews, an
 3. Run `make test`.
 4. Run `make lint`.
 5. Refactor while keeping tests green.
-6. Run `make review-check` before opening or updating a pull request.
+6. Run `make frontend-test` when changing the local demo interface or before full-repository release work.
+7. Run `make review-check` before opening or updating a pull request.
 
 ## Project Commands
 
@@ -33,6 +34,7 @@ make bootstrap
 make generate-samples
 make lint
 make test
+make frontend-test
 make review-check
 make check
 make ci
@@ -54,6 +56,7 @@ Detailed project rules are documented in [docs/development-guidelines.md](/home/
 
 - `pytest` must pass.
 - `pylint` must pass, or any justified exception must be documented.
+- Frontend tests should pass when the secondary demo interface is changed.
 - After each code writing session, run `make lint`.
 - After each review pass, run `make lint` again and improve the result when possible.
 - New behavior should be covered by tests before the change is considered complete.

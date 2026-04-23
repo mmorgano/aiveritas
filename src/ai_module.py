@@ -1,4 +1,4 @@
-"""Placeholder AI integration for issue explanations."""
+"""Non-core placeholder explanation scaffolding for issue payloads."""
 
 from __future__ import annotations
 
@@ -6,13 +6,13 @@ from typing import Any
 
 
 def explain_issue(issue: dict[str, Any]) -> dict[str, Any]:
-    """Return a placeholder AI explanation for a validation issue.
+    """Return placeholder explanation data for a validation issue.
 
     Args:
         issue: Structured validation issue payload.
 
     Returns:
-        A mock explanation object prepared for future LLM integration.
+        A non-core placeholder object kept for schema continuity.
     """
     issue_code = str(issue.get("code", "unknown_issue"))
     columns = issue.get("scope", {}).get("columns", [])
@@ -32,12 +32,15 @@ def explain_issue(issue: dict[str, Any]) -> dict[str, Any]:
         ],
         "recommended_actions": [
             "Inspect the affected rows and related upstream systems.",
-            "Replace this stub with a real LLM-backed explanation service later.",
+            "Treat this explanation block as placeholder metadata, not as a validation feature.",
         ],
         "metadata": {
             "issue_code": issue_code,
             "issue_stage": issue.get("stage"),
             "llm_integration_ready": False,
-            "note": "This response is a placeholder for future LLM integration.",
+            "note": (
+                "This response is placeholder scaffolding and not part "
+                "of the primary v0.1 workflow."
+            ),
         },
     }

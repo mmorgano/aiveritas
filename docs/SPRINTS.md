@@ -26,7 +26,7 @@ Objective:
 
 Delivered:
 
-- `src/` package with loader, validator, report, AI stub, and CLI entry point.
+- `src/` package with loader, validator, report, placeholder explanation scaffolding, and CLI entry point.
 - Synthetic datasets under `data/synthetic/`.
 - Initial tests for loader, validator, and report behavior.
 - Base workflow files such as `Makefile`, `pyproject.toml`, and development guidelines.
@@ -93,7 +93,7 @@ Delivered:
 
 Notes:
 
-- The CLI remains supported, but the repository now has a realistic local application path.
+- The CLI remains the primary workflow, while the repository also contains a small local demo interface.
 
 ## Sprint 3: Validation Hardening
 

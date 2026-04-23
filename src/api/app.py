@@ -1,4 +1,4 @@
-"""FastAPI application factory for the local GUI backend."""
+"""FastAPI application factory for the local demo backend."""
 
 from __future__ import annotations
 

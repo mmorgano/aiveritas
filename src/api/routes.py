@@ -1,4 +1,4 @@
-"""Routes for the local FastAPI backend."""
+"""Routes for the local FastAPI backend used by the demo interface."""
 
 from __future__ import annotations
 

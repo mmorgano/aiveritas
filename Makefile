@@ -41,7 +41,7 @@ review-check: lint test
 
 check: lint test
 
-ci: bootstrap generate-samples check
+ci: bootstrap generate-samples lint test frontend-test
 
 session-start:
 	bash scripts/session_start.sh
@@ -63,8 +63,8 @@ help:
 	'  make lint              Run pylint on src and tests' \
 	'  make test              Run pytest' \
 	'  make review-check      Run lint and tests after writing or reviewing code' \
-	'  make check             Run lint and tests' \
-	'  make ci                Run bootstrap, sample generation, lint, and tests' \
+	'  make check             Run lint and tests for the Python core' \
+	'  make ci                Run bootstrap, sample generation, Python checks, and frontend tests' \
 	'  make session-start     Create/open today session and show resume context' \
 	'  make session-save      Sync today session into LAST_SESSIONS.md' \
 	'                         Optional: SESSION_NOTES="done X||next Y" make session-save'

@@ -1,101 +1,58 @@
 # AIVeritas
 
-AIVeritas is a lightweight validation and reporting engine for structured tabular datasets.
-It is designed for local data-quality checks in operational reporting, statistical preparation, and repeatable validation workflows where a machine-readable report matters more than ad hoc spreadsheet inspection.
+AIVeritas is a local CSV validation tool with deterministic data-quality checks, CLI as the primary interface, JSON reporting, and a small local demo interface.
 
-Example scenario:
-before publishing a monthly reporting table, use AIVeritas to check for missing required values, duplicate entity rows, numeric anomalies, and broken date continuity, then keep the JSON report as a reviewable validation record.
+It is intended for local validation runs where a saved, machine-readable report is more useful than ad hoc spreadsheet inspection.
 
-The project currently supports:
+## Features
 
-- a Python CLI for scripted validation runs
-- a local FastAPI backend
-- a minimal React GUI for interactive use
-- structured JSON reporting for downstream review or automation
+- CSV loading with explicit handling for missing files, empty files, and empty datasets
+- Deterministic validation checks for:
+  - missing values
+  - duplicate rows
+  - numeric outliers
+  - time-series gaps
+- Structured JSON report generation with stable top-level sections
+- CLI exit codes for success and failure
+- Sample CSV datasets for local demonstration
+- Optional local API and browser demo interface built on the same validation core
 
-## Why This Project Exists
+## What v0.1 Includes
 
-Many data problems in reporting workflows are not model problems.
-They are input-quality problems:
+- A local Python CLI as the primary supported workflow
+- JSON reports written to disk
+- Automated Python tests for loader, validator, reporting, CLI, service, and API flows
+- A small local demo interface kept in the repository as a secondary support surface
 
-- missing values in required fields
-- duplicate entity rows
-- unexpected numeric anomalies
-- missing dates or broken time continuity
+## What v0.1 Does Not Include
 
-AIVeritas exists to make those checks explicit, repeatable, and reviewable through a stable report format rather than one-off manual inspection.
+- No real AI features
+- No external services or database
+- No cloud or multi-user deployment model
+- No batch processing
+- No broadly configurable validation thresholds yet
 
-## Current AI Status
+The codebase still contains an `ai_explanation` placeholder field in reports for internal schema compatibility, but it is not part of the v0.1 product scope.
 
-The repository includes an AI explanation module, but it is currently a stub.
-It exists to define the integration boundary for future LLM-based explanations.
-
-The project should therefore be read primarily as:
-
-- a validation and reporting engine today
-- an AI-extendable validation workflow later
-
-## What This Demonstrates
-
-This repository is intended to show practical engineering skills rather than model hype.
-
-- modular Python application structure
-- deterministic validation design with explicit failure handling
-- structured JSON report generation
-- shared service orchestration across CLI and GUI interfaces
-- FastAPI backend and React frontend integration
-- automated tests, linting, and maintainable project documentation
-- portfolio-relevant thinking around data quality, reporting workflows, and validation traceability
-
-## Quality Signals
-
-The current repository includes:
-
-- direct validator tests for missing values, duplicates, numeric outliers, and time-series gaps
-- CLI integration coverage for successful runs and generated failure reports
-- shared-service and API tests for success, validation failure, load failure, and write failure flows
-- frontend tests for validation submission, reopen flows, and recent-report failure handling
-- `pylint`-based linting kept at `10.00/10`
-
-## Architecture At A Glance
-
-Core flow:
-
-1. Load a CSV into a pandas DataFrame.
-2. Run deterministic validation checks.
-3. Normalize issues into a canonical schema.
-4. Build a structured JSON report.
-5. Surface the result through either the CLI or the local GUI.
-
-Main components:
-
-- `src/loader.py`
-  CSV loading with explicit empty-file and empty-dataset handling
-- `src/validator.py`
-  missing values, duplicates, outliers, and time-series gap checks
-- `src/services/validation_service.py`
-  shared orchestration for CLI and GUI flows
-- `src/report.py`
-  final report construction and persistence
-- `src/api/`
-  local FastAPI interface for the GUI
-- `frontend/`
-  React + Vite interface for interactive local use
-
-More detail:
-- [Architecture](docs/ARCHITECTURE.md)
-- [Feature Inventory](docs/FEATURES.md)
-- [User Guide](docs/USER_GUIDE.md)
-
-## Quick Start
-
-### CLI
+## Installation
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -r requirements.txt -r requirements-dev.txt
+```
 
+Optional, only if you want to run the local demo interface:
+
+```bash
+make frontend-install
+```
+
+## Primary Workflow: CLI
+
+Run a validation directly from the command line:
+
+```bash
 python3 -m src.main \
   --input data/synthetic/sample_missing.csv \
   --output reports/validation_report.json \
@@ -103,58 +60,45 @@ python3 -m src.main \
   --value-column VALUE \
   --time-column DATE
 ```
-
-### GUI
-
+Example output:
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install -r requirements.txt -r requirements-dev.txt
-make frontend-install
-
-make api-dev
-make gui-dev
+Validation report saved to reports/validation_report.json
 ```
 
-Then open the local Vite URL shown in the terminal.
+Expected behavior:
 
-## Validation Scope
+1. The CSV is loaded from `--input`.
+2. Enabled deterministic checks are executed.
+3. A JSON report is written to `--output`.
+4. The process exits with `0` on a successful run and `1` when the run fails.
 
-Implemented checks:
+## Example Input and Output
 
-- missing values
-- duplicate rows based on selected key columns
-- numeric outliers using z-score
-- time-series gaps based on a selected date column
+Example input datasets are kept under [`data/synthetic/`](data/synthetic).
 
-Current limits:
+- Clean sample: [`data/synthetic/sample_clean.csv`](data/synthetic/sample_clean.csv)
+- Missing values sample: [`data/synthetic/sample_missing.csv`](data/synthetic/sample_missing.csv)
+- Duplicate rows sample: [`data/synthetic/sample_duplicates.csv`](data/synthetic/sample_duplicates.csv)
+- Outliers sample: [`data/synthetic/sample_outliers.csv`](data/synthetic/sample_outliers.csv)
+- Time-series gap sample: [`data/synthetic/sample_timeseries_gap.csv`](data/synthetic/sample_timeseries_gap.csv)
 
-- one file at a time in the GUI
-- AI explanations are placeholders only
-- validation thresholds are not yet broadly configurable
-- the GUI is intentionally a compact summary interface, not a full report explorer
+A committed example report using the current schema is available at [`examples/sample_validation_report.json`](examples/sample_validation_report.json).
 
-## Example Output
-
-Each run produces a structured JSON report.
-
-High-level structure:
+High-level report structure:
 
 ```json
 {
+  "schema_version": "1.0.0",
   "report_type": "validation_report",
   "run": {
     "status": "succeeded",
-    "stage": "completed"
-  },
-  "configuration": {
-    "key_columns": ["ID"],
-    "value_column": "VALUE",
-    "time_column": "DATE"
+    "stage": "completed",
+    "input_path": "data/synthetic/sample_missing.csv"
   },
   "dataset": {
     "loaded": true,
-    "row_count": 10
+    "row_count": 10,
+    "column_count": 4
   },
   "validation": {
     "status": "failed",
@@ -164,44 +108,89 @@ High-level structure:
       "numeric_outlier",
       "time_series_gap"
     ],
-    "issue_count": 1
+    "issue_count": 2
   },
   "summary": {
-    "total_issues": 1
+    "total_issues": 2,
+    "issues_by_severity": {
+      "warning": 2
+    }
   },
   "issues": [
     {
       "issue_id": "ISSUE-0001",
-      "code": "duplicate_rows"
+      "code": "missing_values",
+      "severity": "warning",
+      "message": "Column 'VALUE' contains missing values."
     }
   ]
 }
 ```
+Note:
 
-The full schema is documented through the codebase and user guide:
+The full report contains additional fields such as detailed scope, metrics, and contextual metadata.
+The ai_explanation field may appear in the report as placeholder scaffolding, but it is not part of the v0.1 feature set.
+
+
+## Secondary Demo Interface
+
+The repository also includes:
+
+- a local FastAPI backend under `src/api/`
+- a small React + Vite browser interface under `frontend/`
+
+These are secondary demo/support interfaces for local use. They are not the primary product surface for v0.1.
+
+If you want to run them:
+
+```bash
+make api-dev
+make gui-dev
+```
+
+More detail is available in [docs/USER_GUIDE.md](docs/USER_GUIDE.md).
+
+## Project Structure
+
+- `src/main.py`: CLI entry point
+- `src/loader.py`: CSV loading
+- `src/validator.py`: deterministic validation checks
+- `src/schemas.py`: canonical issue/report helpers
+- `src/report.py`: report assembly and persistence
+- `src/services/validation_service.py`: shared execution flow
+- `src/api/`: local API used by the demo interface
+- `frontend/`: local browser demo interface
+- `tests/`: Python test suite
+- `data/synthetic/`: sample CSV inputs
+- `examples/`: intentional example output artifacts
+
+## Limitations
+
+- CLI is the only primary workflow in v0.1.
+- The browser interface is intentionally small and secondary.
+- One dataset is processed per run.
+- Validation thresholds are mostly hardcoded.
+- The current checks are limited to missing values, duplicates, outliers, and time-series gaps.
+- The project is local-only and has no remote execution model.
+
+## Development and Verification
+
+Useful commands from the repository root:
+
+```bash
+make lint
+make test
+make frontend-test
+```
+
+The CI workflow runs Python linting, Python tests, and frontend tests.
+
+## Documentation
+
 - [User Guide](docs/USER_GUIDE.md)
 - [Architecture](docs/ARCHITECTURE.md)
+- [Feature Inventory](docs/FEATURES.md)
+- [Test Matrix](docs/TEST_MATRIX.md)
 - [Decisions](docs/DECISIONS.md)
-
-## Public Repository Notes
-
-- License: [MIT](LICENSE)
-- Changelog: [CHANGELOG.md](CHANGELOG.md)
-- Roadmap: [docs/ROADMAP.md](docs/ROADMAP.md)
-- Sprints: [docs/SPRINTS.md](docs/SPRINTS.md)
-- Backlog: [docs/BACKLOG.md](docs/BACKLOG.md)
-- Test Matrix: [docs/TEST_MATRIX.md](docs/TEST_MATRIX.md)
-
-## Future Direction
-
-Near-term improvements:
-
-- configurable validation thresholds
-- richer API integration coverage across persisted-report flows
-- direct tests for AI explanation stub output shape
-
-Longer-term direction:
-
-- real AI explanation integration behind the existing interface
-- richer report exploration
-- batch processing for multiple datasets
+- [Roadmap](docs/ROADMAP.md)
+- [Changelog](CHANGELOG.md)

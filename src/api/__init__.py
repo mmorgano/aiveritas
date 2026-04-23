@@ -1,4 +1,4 @@
-"""FastAPI application package for the local GUI backend."""
+"""FastAPI application package for the local demo backend."""
 
 from src.api.app import create_app
 

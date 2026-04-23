@@ -15,15 +15,15 @@ It should stay short enough to maintain during normal feature work.
 | `F-07` | Structured report sections | Implemented | Covered | `tests/test_report.py` | Verifies report envelope and issue IDs. |
 | `F-07` | Failed-load report handling | Implemented | Covered | `tests/test_report.py` | Verifies stable report generation without a dataset. |
 | `F-06` | Processing error normalization | Implemented | Covered | `tests/test_report.py` | Verifies error-to-issue mapping. |
-| `F-15` | Shared validation orchestration success and failure paths | Implemented | Covered | `tests/test_validation_service.py` | Verifies shared execution for success, load failure, validation failure, and write failure. |
-| `F-16` | Local API validation and reopen endpoints | Implemented | Covered | `tests/test_api.py` | Verifies health, validate, recent-report, and reopen flows. |
-| `F-18` | Recent report history persistence | Implemented | Covered | `tests/test_history_service.py` | Verifies append, trim, malformed-index fallback, and recovery. |
-| `F-17` | GUI summary and recent-report interactions | Implemented | Covered | `frontend/src/__tests__/App.test.tsx` | Verifies recent-report loading, initial-load failure handling, validation submit, refresh, reopen, and error handling. |
+| `F-15` | Shared validation orchestration success and failure paths | Implemented | Covered | `tests/test_validation_service.py` | Verifies shared execution for the CLI path and the secondary demo interface. |
+| `F-16` | Local API validation and reopen endpoints | Secondary | Covered | `tests/test_api.py` | Verifies the local backend used by the browser demo interface. |
+| `F-18` | Recent report history persistence | Secondary | Covered | `tests/test_history_service.py` | Verifies the local history index used by the demo interface. |
+| `F-17` | GUI summary and recent-report interactions | Secondary | Covered | `frontend/src/__tests__/App.test.tsx` | Verifies recent-report loading, validation submit, refresh, reopen, and error handling in the demo interface. |
 | `F-11` | CLI success path | Implemented | Covered | `tests/test_cli.py` | Verifies exit code, stdout, and saved success report generation. |
 | `F-11` | CLI failure path | Implemented | Covered | `tests/test_cli.py` | Verifies exit code, stderr, and saved failure report generation for missing input. |
-| `F-08` | AI explanation stub structure | Implemented | Partial | Indirect via `tests/test_report.py` | Should eventually gain direct unit tests. |
+| `F-08` | Placeholder explanation scaffolding | Secondary | Partial | Indirect via `tests/test_report.py` | Kept for schema continuity and not treated as a core v0.1 feature. |
 
 ## Coverage Priorities
 
-- Add integration coverage spanning frontend request shape through backend validation execution once the local app surface stabilizes.
-- Add direct tests for AI stub output shape once the interface stabilizes further.
+- Preserve CLI-path coverage as the primary quality signal for v0.1.
+- Keep frontend and API tests in CI because those secondary surfaces are still committed and supported locally.

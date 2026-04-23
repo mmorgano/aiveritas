@@ -2,9 +2,9 @@
 
 ## Repository Description Options
 
-1. Lightweight validation and reporting engine for structured tabular datasets, with CLI, FastAPI backend, React GUI, and JSON reports.
-2. Data-quality and reporting validation engine for structured tables, with repeatable checks, machine-readable output, and local CLI/GUI workflows.
-3. Validation and structured reporting tool for tabular datasets, focused on repeatable quality checks for operational and statistical workflows.
+1. Local CSV validation tool with deterministic quality checks, JSON reporting, and a CLI-first workflow.
+2. Local validation and structured reporting tool for CSV datasets, with a primary CLI and small demo interface.
+3. Deterministic CSV validation tool for local workflows, focused on repeatable checks and machine-readable JSON output.
 
 ## Topic Set Option 1
 
@@ -13,9 +13,8 @@
 - data-quality
 - data-validation
 - reporting
-- fastapi
-- react
 - json
+- cli
 
 ## Topic Set Option 2
 
@@ -23,14 +22,13 @@
 - tabular-data
 - quality-checks
 - structured-reporting
-- fastapi
-- react
 - testing
 - data-engineering
+- cli
 
 ## Optional About Text
 
-Local validation and reporting engine for structured tabular datasets. Focused on repeatable quality checks, JSON output, and lightweight CLI/GUI workflows.
+Local CSV validation tool focused on deterministic checks, JSON output, a primary CLI workflow, and a small local demo interface.
 
 ## Manual GitHub Actions
 

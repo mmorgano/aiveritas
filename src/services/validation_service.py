@@ -1,4 +1,4 @@
-"""Shared validation orchestration for CLI and GUI entry points."""
+"""Shared validation orchestration for the CLI and local demo interface."""
 
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def validate_input(
     value_column: str | None = None,
     time_column: str | None = None,
 ) -> ValidationExecutionResult:
-    """Run deterministic validation without persistence or AI enrichment.
+    """Run deterministic validation without persistence or placeholder enrichment.
 
     Args:
         input_path: Path to the input CSV file.
@@ -257,7 +257,7 @@ def _build_executed_checks(
 
 
 def _enrich_issues(issues: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Attach AI explanations to validation issues."""
+    """Attach placeholder explanation data to validation issues."""
     enriched_issues: list[dict[str, Any]] = []
 
     for issue in issues:

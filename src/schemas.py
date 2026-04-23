@@ -40,7 +40,7 @@ def build_issue(
         entity_keys: Entity or business keys related to the issue.
         metrics: Numeric or structured metrics for the issue.
         context: Additional context that does not fit the reserved sections.
-        ai_explanation: Optional AI explanation payload.
+        ai_explanation: Optional placeholder explanation payload.
 
     Returns:
         A normalized issue dictionary.

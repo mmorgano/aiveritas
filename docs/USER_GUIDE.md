@@ -2,23 +2,152 @@
 
 ## Overview
 
-AIVeritas validates structured tabular datasets through:
+AIVeritas is a local CSV validation tool.
 
-- a local CLI for scriptable runs
-- a local browser-based GUI for interactive runs
+For v0.1, the primary workflow is the CLI:
 
-It runs deterministic data-quality checks, builds a structured JSON report, and adds placeholder AI explanations to each issue.
+- run validation locally
+- save a structured JSON report
+- use the process exit code to detect success or failure
 
-Current validation checks:
+The repository also includes a small local API and browser demo interface, but they are secondary support surfaces, not the primary product workflow.
 
-- missing values
-- duplicate rows based on selected key columns
-- numeric outliers based on a selected numeric column
-- time-series gaps based on a selected date column
+## Primary Workflow: CLI
 
-## Quick Start
+### Install dependencies
 
-### GUI
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt -r requirements-dev.txt
+```
+
+### Run a validation
+
+```bash
+python3 -m src.main \
+  --input data/synthetic/sample_missing.csv \
+  --output reports/validation_report.json \
+  --key-columns ID \
+  --value-column VALUE \
+  --time-column DATE
+```
+
+### CLI arguments
+
+- `--input`
+  Path to the input CSV file.
+- `--output`
+  Path where the JSON report will be written.
+- `--key-columns`
+  One or more columns used for duplicate detection.
+- `--value-column`
+  Numeric column used for outlier detection.
+- `--time-column`
+  Date or period column used for time-series gap detection.
+
+### Validation rules
+
+- Missing-value validation always runs.
+- Duplicate validation runs when `--key-columns` is provided.
+- Outlier validation runs when `--value-column` is provided.
+- Time-series-gap validation runs when `--time-column` is provided.
+
+### Exit codes
+
+- `0`: the validation run completed and a report was written
+- `1`: the run failed and a failure report was written when possible
+
+Note:
+- A completed run can still contain validation issues.
+- In that case, the JSON report will show `validation.status = failed` even though the CLI process itself completed successfully.
+
+## Example Inputs
+
+Sample CSV inputs are kept under `data/synthetic/`:
+
+- `sample_clean.csv`
+- `sample_missing.csv`
+- `sample_duplicates.csv`
+- `sample_outliers.csv`
+- `sample_timeseries_gap.csv`
+
+These files are intended for local testing and demonstration.
+
+## JSON Report
+
+Each run produces a JSON report.
+
+Typical output location:
+
+```text
+reports/<name>.json
+```
+
+The current report structure includes:
+
+- `run`
+- `configuration`
+- `dataset`
+- `validation`
+- `summary`
+- `issues`
+
+An example report using the current schema is committed at `examples/sample_validation_report.json`.
+
+## Interpreting Results
+
+### Run section
+
+- `run.status`
+  Whether the application flow succeeded or failed.
+- `run.stage`
+  The last completed or failed stage.
+- `run.input_path`
+  Input path used for the run.
+
+### Validation section
+
+- `validation.status`
+  Whether validation passed or failed based on detected issues.
+- `validation.executed_checks`
+  Which checks actually ran.
+- `validation.issue_count`
+  Number of issue objects generated for the run.
+
+### Summary section
+
+- `summary.total_issues`
+  Total number of issue objects in the report.
+
+### Issues section
+
+Each issue includes:
+
+- a stable issue identifier
+- a machine-readable issue code
+- a severity
+- a message
+- scope data such as columns and row indices
+
+The current schema still contains an `ai_explanation` placeholder object on issues. This is non-core scaffolding and should not be treated as a real v0.1 feature.
+
+## Secondary Demo Interface
+
+The repository also includes:
+
+- a local FastAPI backend
+- a small React + Vite browser interface
+
+This interface is useful for local demonstration, but it is intentionally secondary in v0.1.
+
+### Run the local demo interface
+
+Install frontend dependencies:
+
+```bash
+make frontend-install
+```
 
 Start the local API:
 
@@ -34,178 +163,40 @@ make gui-dev
 
 Open the local Vite URL shown in the terminal.
 
-### CLI
+### Demo interface limits
 
-Run a validation directly from the command line:
-
-```bash
-python3 -m src.main \
-  --input data/synthetic/sample_missing.csv \
-  --output reports/validation_report.json \
-  --key-columns ID \
-  --value-column VALUE \
-  --time-column DATE
-```
-
-## Using The GUI
-
-### 1. Choose a CSV file
-
-- Use the `CSV file` picker to select one local CSV file.
-- The selected filename appears below the picker.
-
-### 2. Set validation inputs
-
-- `Key columns`
-  Use one or more columns for duplicate detection.
-  Example: `ID`
-- `Value column`
-  Use a numeric column for outlier detection.
-  Example: `VALUE`
-- `Time column`
-  Use a date or period column for time-series gap detection.
-  Example: `DATE`
-
-Notes:
-
-- Missing-value validation always runs.
-- Duplicate validation runs when `Key columns` is provided.
-- Outlier validation runs when `Value column` is provided.
-- Time-series-gap validation runs when `Time column` is provided.
-
-### 3. Run validation
-
-- Click `Run validation`.
-- The status banner reports whether validation is running, completed, or failed.
-
-## How To Read Results
-
-### Summary section
-
-- `Report ID`
-  Unique identifier for the generated report.
-- `Input file`
-  Name of the CSV file used for the run.
-- `Generated at`
-  UTC timestamp for report generation.
-- `Run status`
-  Whether the application flow succeeded or failed.
-- `Validation status`
-  Whether validation passed or failed based on detected issues.
-- `Rows`
-  Number of dataset rows loaded into the run.
-- `Total issues`
-  Number of structured issues found in the report.
-- `Saved report`
-  Download link for the generated JSON report.
-
-### Executed checks
-
-This section shows which validations actually ran for the current result.
-
-Example:
-
-- `missing_values`
-- `duplicate_rows`
-- `numeric_outlier`
-- `time_series_gap`
-
-### Issues found
-
-Each issue entry shows:
-
-- issue identifier
-- human-readable message
-- severity and issue code
-- columns involved
-- row indices when available
-
-If `Total issues` is `1`, it means one structured issue object was produced in the report.
-That issue may refer to one or more rows, columns, or entities depending on the validation.
-
-### Recent reports
-
-The right-hand panel keeps a small local history of recent validation runs.
-
-Use `Reopen <filename>` to reopen a previously saved report summary.
-
-## JSON Report
-
-Each run produces a JSON report under the local reports directory.
-
-Typical location:
-
-```text
-reports/<report_id>.json
-```
-
-The report includes:
-
-- `run`
-- `configuration`
-- `dataset`
-- `validation`
-- `summary`
-- `issues`
-
-Use the `Download JSON report` link in the GUI if you want the saved file directly.
-
-## Common Scenarios
-
-### Duplicate check
-
-If you select `sample_duplicates.csv` and set:
-
-- `Key columns = ID`
-- `Value column = VALUE`
-- `Time column = DATE`
-
-then AIVeritas will run:
-
-- missing-value validation
-- duplicate detection
-- numeric outlier detection
-- time-series gap detection
-
-If the summary shows:
-
-- `Validation status = failed`
-- `Rows = 10`
-- `Total issues = 1`
-
-that means one issue object was created in the final report for that run.
-
-## Current Limits
-
-- The GUI handles one CSV file at a time.
-- The GUI is still intentionally minimal.
-- The AI module is a stub, not a real model integration.
-- Validation thresholds are not yet broadly configurable from the UI.
-- The GUI shows a useful summary, not yet a full report explorer.
+- One CSV file at a time
+- Minimal summary view
+- Lightweight recent-report reopening
+- No full report explorer
 
 ## Troubleshooting
 
-### Clicking `Run validation` does nothing
+### The CLI exits with an error
 
-Check that both services are running:
+Check:
+
+- the input path exists
+- the output path is writable
+- the selected columns exist in the CSV
+- the value column is numeric if outlier detection is enabled
+- the time column contains parseable date values if time-gap detection is enabled
+
+### The report file is missing
+
+Check:
+
+- the `--output` path is valid
+- the destination directory is writable
+- the process did not fail during the write stage
+
+### The local demo interface cannot connect
+
+Check that both processes are running:
 
 ```bash
 make api-dev
 make gui-dev
 ```
 
-If the local API is not reachable, the GUI should show an explicit error message.
-
-### The report download link is missing
-
-- Make sure the validation actually completed.
-- Make sure the backend was able to save the report.
-- Check the status banner for write or backend errors.
-
-### A validation does not run
-
-Check whether the related input was provided:
-
-- no `Key columns` -> no duplicate check
-- no `Value column` -> no outlier check
-- no `Time column` -> no time-series-gap check
+If the local API is not reachable, the demo interface should show an explicit error message.

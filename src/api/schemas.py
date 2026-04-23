@@ -1,4 +1,4 @@
-"""Response models for the local FastAPI backend."""
+"""Response models for the local FastAPI backend used by the demo interface."""
 
 from __future__ import annotations
 

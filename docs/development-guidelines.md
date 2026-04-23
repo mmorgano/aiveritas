@@ -16,7 +16,7 @@ Project-specific constraints are summarized in [docs/AIVERITAS_RULES.md](/home/m
 - Do not introduce hidden side effects in helper functions.
 - Keep validation logic modular and easy to extend.
 - Preserve the AIVeritas issue/report schema unless a change is intentional and documented.
-- Keep deterministic validation responsibilities separate from AI explanation responsibilities.
+- Keep deterministic validation responsibilities separate from non-core placeholder explanation scaffolding.
 - Keep the CLI supported as a first-class interface.
 - Route local GUI behavior through shared service layers rather than duplicating validation flow in interface code.
 

@@ -1,6 +1,6 @@
 # Decisions
 
-This file records lightweight architectural decision records for choices that materially shape the codebase.
+This file records lightweight architectural decisions that materially shape the repository.
 
 ## ADR-001: Keep the project as a local CLI first
 
@@ -10,28 +10,17 @@ Date: `2026-04-19`
 
 Context:
 
-- The repository is still early-stage and the main risk is validation correctness, not deployment topology.
-- The current codebase already centers around a local CLI entry point in `src/main.py`.
+- The core problem is local CSV validation correctness.
+- The most reliable product path is a direct local CLI.
 
 Decision:
 
-- Build AIVeritas first as a local Python CLI instead of starting with a service or web API.
-
-Why:
-
-- The core problem is validation correctness, not deployment complexity.
-- A CLI keeps the feedback loop short and the architecture simple.
-- It is easier to test and document at the current project stage.
+- Keep the CLI as the primary interface.
 
 Consequences:
 
-- Operational scope stays small.
-- Future API or service work remains possible but is not a current obligation.
-
-Implications for development:
-
-- New features should fit the CLI-first workflow unless a broader interface change is explicitly planned.
-- Tests and documentation should continue to treat the CLI as the primary delivery surface.
+- The CLI remains the reference workflow for documentation and release scope.
+- Other interfaces must not redefine the core validation flow.
 
 ## ADR-002: Use a canonical issue schema across modules
 
@@ -41,29 +30,18 @@ Date: `2026-04-19`
 
 Context:
 
-- Validation checks, failure handling, and reporting all need to exchange issue data.
-- The current repository uses shared schema helpers in `src/schemas.py`.
+- Validation checks, failure handling, and reporting need a shared structure.
 
 Decision:
 
-- Use a shared issue structure for validation issues, failure issues, AI enrichment, and report generation.
-
-Why:
-
-- Inconsistent dictionaries were difficult to extend safely.
-- A stable issue contract makes reporting and test traceability easier.
+- Use shared schema helpers for issues and report-adjacent payloads.
 
 Consequences:
 
-- New checks should emit the canonical schema instead of ad hoc dictionaries.
-- Schema changes should be documented and tested.
+- Validation and reporting stay aligned through one issue shape.
+- Schema changes should be intentional and documented.
 
-Implications for development:
-
-- `src/validator.py`, `src/report.py`, and `src/ai_module.py` should evolve through the shared schema layer rather than diverging locally.
-- Report changes should be reflected in `docs/ARCHITECTURE.md`, `docs/FEATURES.md`, and `docs/TEST_MATRIX.md` when relevant.
-
-## ADR-003: Keep AI integration behind a stub module for now
+## ADR-003: Keep placeholder explanation scaffolding out of v0.1 scope
 
 Status: `Accepted`
 
@@ -71,27 +49,18 @@ Date: `2026-04-19`
 
 Context:
 
-- The repository already contains an AI explanation interface in `src/ai_module.py`, but it is intentionally a stub.
-- Deterministic validation and report stability are still more important than model integration.
+- The codebase contains `src/ai_module.py` and an `ai_explanation` field in issue payloads.
+- These placeholders do not provide real user value in v0.1.
 
 Decision:
 
-- Keep `src/ai_module.py` as a placeholder instead of integrating a real external model now.
-
-Why:
-
-- Deterministic validation and report structure must stabilize first.
-- External AI integration would add moving parts before the core validation path is mature.
+- Keep the placeholder scaffolding in code for internal schema continuity.
+- Do not position it as a core product capability.
 
 Consequences:
 
-- AI output is predictable but not yet useful beyond interface validation.
-- A later AI integration should preserve the current explanation interface as much as practical.
-
-Implications for development:
-
-- AI-related tests should focus on output shape and interface stability before they focus on model behavior.
-- Planned AI work should remain clearly marked as planned in roadmap and feature-tracking documents.
+- v0.1 documentation should describe AIVeritas as a deterministic CSV validation tool.
+- The placeholder explanation field remains secondary and non-core.
 
 ## ADR-004: Use pytest and pylint as default quality gates
 
@@ -101,27 +70,16 @@ Date: `2026-04-19`
 
 Context:
 
-- The project is intended to look and behave like a maintainable engineering repository.
-- The current workflow already relies on `make test`, `make lint`, and a pre-commit hook.
+- The project needs lightweight, explicit engineering discipline.
 
 Decision:
 
 - Standardize on `pytest` for tests and `pylint` for linting.
 
-Why:
-
-- The project needs lightweight but explicit engineering discipline.
-- These tools are already aligned with the repository workflow and contributor guidance.
-
 Consequences:
 
-- New work should include tests when behavior changes.
-- Linting should run after coding and review cycles.
-
-Implications for development:
-
-- Contributor guidance and coding-agent guidance should remain aligned with `pytest` and `pylint`.
-- When test or lint scope changes materially, update `CONTRIBUTING.md`, `AGENTS.md`, and `README.md`.
+- New behavior should be covered by tests.
+- Local and CI workflows should reflect these checks.
 
 ## ADR-005: Keep raw session logs private and use durable public artifacts instead
 
@@ -131,28 +89,16 @@ Date: `2026-04-19`
 
 Context:
 
-- Session-resume notes can help local execution, but raw working logs are noisy and often not suitable for a public repository.
-- The repository already has stronger public artifacts for durable history, such as `CHANGELOG.md`, `docs/SPRINTS.md`, and `docs/DECISIONS.md`.
+- Local session notes are useful for workflow continuity but are not public project artifacts.
 
 Decision:
 
 - Keep raw session-tracking files private and ignored by Git.
-- Use durable project artifacts, not session transcripts, to communicate repository history publicly.
-
-Why:
-
-- Public repository documentation should communicate decisions, progress, and scope without exposing ephemeral AI or personal workflow noise.
-- Durable documents are easier to maintain and more useful to GitHub visitors.
+- Use repository documents such as README, changelog, roadmap, and ADRs for durable public context.
 
 Consequences:
 
-- The `SESSIONS/` workflow may exist locally, but it is not part of the committed documentation system.
-- Public progress should be reflected through roadmap, sprint, backlog, ADR, and changelog updates instead.
-
-Implications for development:
-
-- Do not commit raw `SESSIONS/` logs.
-- If a session produces a meaningful architectural or planning outcome, promote that outcome into `CHANGELOG.md`, `docs/SPRINTS.md`, or `docs/DECISIONS.md` as appropriate.
+- `SESSIONS/` stays out of committed project history.
 
 ## ADR-006: Defer typed domain models until schema pressure justifies them
 
@@ -162,29 +108,19 @@ Date: `2026-04-19`
 
 Context:
 
-- The current project uses plain dictionaries plus shared schema helpers to represent issues and reports.
-- The codebase is still small, but schema growth could eventually justify stronger typed models.
+- The current project uses dictionaries plus shared helpers to represent issues and reports.
+- The codebase is still small.
 
 Decision:
 
-- Keep the current dictionary-based schema approach for now and revisit typed models only if maintainability pressure becomes real.
-
-Why:
-
-- The current scope does not yet justify the extra abstraction cost of formal domain-model classes.
-- The shared helper layer already centralizes most schema handling.
+- Keep the current dictionary-based approach for now.
 
 Consequences:
 
-- The project stays simple in the short term.
-- The decision should be revisited if schema validation, mutation, or cross-module coupling grows significantly.
+- The code stays simple at current size.
+- Revisit only if schema growth creates real maintenance pressure.
 
-Implications for development:
-
-- New work should continue using schema helpers consistently.
-- If multiple modules start duplicating schema logic, revisit this ADR.
-
-## ADR-007: Add a local GUI as a secondary interface over the shared validation core
+## ADR-007: Keep the local API and GUI as secondary interfaces
 
 Status: `Accepted`
 
@@ -192,28 +128,15 @@ Date: `2026-04-20`
 
 Context:
 
-- The CLI already supports the deterministic validation workflow, but it is not the most approachable interface for interactive local use.
-- A browser-based GUI was requested, but rewriting validation logic for a second interface would create avoidable drift.
-- The repository now includes a shared orchestration layer in `src/services/validation_service.py`.
+- A browser interface exists and works locally.
+- The CLI remains the cleanest primary release surface for v0.1.
 
 Decision:
 
-- Add a local FastAPI backend and React + Vite frontend as a second local interface.
-- Keep the CLI supported and route both interfaces through the same shared validation service.
-
-Why:
-
-- The GUI improves accessibility for local use without changing the core validation problem.
-- A shared service layer keeps validation behavior consistent across interfaces.
-- FastAPI and React are a pragmatic split for a local application that may grow gradually.
+- Keep the FastAPI backend and React GUI in the repository.
+- Treat them as secondary local demo/support interfaces over the shared validation core.
 
 Consequences:
 
-- The repository now contains Python backend and frontend application code.
-- Interface-level concerns such as HTTP transport, upload handling, and recent-report history must stay outside deterministic validation modules.
-- Verification now needs both Python and frontend checks.
-
-Implications for development:
-
-- Changes to validation behavior should first land in the shared service or deeper core modules, not directly in CLI or API wrappers.
-- Interface changes should update `docs/ARCHITECTURE.md`, `docs/FEATURES.md`, `docs/TEST_MATRIX.md`, and `README.md` when they change user-visible behavior.
+- README and user guidance should present the CLI first.
+- Validation behavior should continue to flow through shared service code rather than interface-specific implementations.
